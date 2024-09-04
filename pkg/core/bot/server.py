@@ -12,7 +12,7 @@ from pkg.core.bot.event import (
     friend_eventHandler_run,
 )
 from pkg.core.plugin.pluginloader import PluginManager
-from pkg.config import only_At, Bot_QQ
+from pkg.config import only_At, Bot_QQ, admin, super_admin
 from pkg.tools.log import log
 
 
@@ -76,7 +76,10 @@ class Listen:
                 msgList,
                 data["group_id"],
             )
-
+            if event.sender.user_id in admin:
+                event.sender.permission = 2
+            if event.sender.user_id in super_admin:
+                event.sender.permission = 3
             log.info(
                 f"[群{data['group_id']}] -> {data['sender']['nickname']}:  {msgList} "
             )
@@ -98,6 +101,10 @@ class Listen:
                 ),
                 msgList,
             )
+            if event.sender.user_id in admin:
+                event.sender.permission = 2
+            if event.sender.user_id in super_admin:
+                event.sender.permission = 3
             log.info(
                 f"[好友{data['sender']['user_id']}] -> {data['sender']['nickname']}:  {msgList} "
             )

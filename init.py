@@ -45,12 +45,19 @@ def onHelp(event: GroupEvent | FriendEvent) -> None:
 def onNoCommand(event: GroupEvent | FriendEvent) -> None:
     bot = BotManager.getBot()
     if isinstance(event, GroupEvent):
-        bot.send_group_msg(
-            event.group_id, [Text("未找到该命令。\n请输入/help查看帮助菜单。")]
-        )
+        bot.send_group_msg(event.group_id, [Text("未知命令。\n输入/help查看帮助。")])
         return
     if isinstance(event, FriendEvent):
         bot.send_friend_msg(
-            event.sender.user_id, [Text("未找到该命令。\n请输入/help查看帮助菜单。")]
+            event.sender.user_id, [Text("未知命令。\n输入/help查看帮助。")]
         )
+
+
+@regNoCommand
+def onNoCommand(event: GroupEvent | FriendEvent) -> None:
+    bot = BotManager.getBot()
+    if isinstance(event, GroupEvent):
+        bot.send_group_msg(event.group_id, [Text("你的权限不足以执行此命令。")])
         return
+    if isinstance(event, FriendEvent):
+        bot.send_friend_msg(event.sender.user_id, [Text("你的权限不足以执行此命令。")])

@@ -8,10 +8,11 @@ class Sender:
         card (str): 发送者的群名片。
     """
 
-    def __init__(self, user_id: int, nickname: str, card: str):
+    def __init__(self, user_id: int, nickname: str, card: str, permission: int = 1):
         self.user_id = user_id
         self.nickname = nickname
         self.card = card
+        self.permission = permission
 
     def __str__(self):
         return f"{self.user_id}"

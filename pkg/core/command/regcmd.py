@@ -1,7 +1,7 @@
 from pkg.core.command.command import Command, regNoCommand, command_list
 
 
-def regCommand(name: str, description: str = ""):
+def regCommand(name: str, description: str = "", permission: int = 1):
     """
     注册命令。
 
@@ -12,11 +12,13 @@ def regCommand(name: str, description: str = ""):
 
     Args:
         name (str): 命令名。
+        description (str, optional): 命令描述。默认为"".
+        permission (int, optional): 权限等级。默认为1。
     """
 
     def cmd_func(func):
         if name == "" or name is None:
             raise Exception("没有指定命令名。")
-        command_list.append(Command(name, func, description))
+        command_list.append(Command(name, func, description, permission))
 
     return cmd_func

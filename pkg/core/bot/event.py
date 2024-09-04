@@ -64,6 +64,9 @@ def friend_eventHandler_run(*event: FriendEvent):
         if cmd is None:  # 如果命令不存在
             noCommand[0].run(event[0])
             return
+        if cmd.permission > event[0].sender.permission:  # 如果权限不足
+            noCommand[1].run(event[0])
+            return
         cmd.run(event[0])
         return
     for func in eventHandler_friend:
@@ -78,6 +81,9 @@ def group_eventHandler_run(*event: GroupEvent):
         cmd = event[0].getCommand()
         if cmd is None:  # 如果命令不存在
             noCommand[0].run(event[0])
+            return
+        if cmd.permission > event[0].sender.permission:  # 如果权限不足
+            noCommand[1].run(event[0])
             return
         cmd.run(event[0])
         return

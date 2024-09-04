@@ -21,4 +21,4 @@ class Plugin(PluginBase):
     def onEvent(self, event: FriendEvent) -> bool:
         event.message = MessageList([Text("你好")])
         # 返回True表示其他插件/机器人不再处理此事件(False同理)
-        return True
+        return False
