@@ -183,7 +183,7 @@ class MessageList:
             if isinstance(message, Face):
                 return True
         return False
-    
+
     def onlyText(self) -> bool:
         """
         判断消息列表中是否只有文本。

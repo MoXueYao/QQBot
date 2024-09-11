@@ -12,8 +12,11 @@ def regCommand(name: str, description: str = "", permission: int = 1):
 
     Args:
         name (str): 命令名。
-        description (str, optional): 命令描述。默认为"".
-        permission (int, optional): 权限等级。默认为1。
+        description (str): 命令描述。默认为"".
+        permission (int): 权限等级。默认为1.\n
+            1:普通用户
+            2:管理员
+            3:超级管理员
     """
 
     def cmd_func(func):
