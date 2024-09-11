@@ -17,11 +17,11 @@ def Init(host: str, port: int, target_port: int) -> NTBot:
         NTBot: 机器人实例
     """
     bot = BotManager.init(host, port, target_port)
-    PluginManager.loadPlugin()
+    PluginManager.loadAllPlugin()
     return bot
 
 
-@regCommand("help", "查看命令帮助。")
+@regCommand("help", "查看命令帮助")
 def onHelp(event: GroupEvent | FriendEvent) -> None:
     bot = BotManager.getBot()
     re_msg = "帮助菜单:\n"

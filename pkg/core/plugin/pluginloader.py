@@ -4,8 +4,6 @@ import os
 import importlib.util
 from pathlib import Path
 
-eventCache = None
-
 
 class PluginManager:
     """
@@ -14,7 +12,7 @@ class PluginManager:
     插件管理器负责加载、卸载插件。
     """
 
-    def loadPlugin():
+    def loadAllPlugin():
         """
         加载所有插件。
         读取文件中的插件(\plugins\插件名\main.py),并调用onLoad方法。
@@ -47,7 +45,7 @@ class PluginManager:
 
     def unLoadPlugin(pluginName: str):
         """
-        卸载插件。
+        卸载指定插件。
 
         Args:
             plugin (str): 插件名称。
@@ -68,24 +66,36 @@ class PluginManager:
         except Exception as e:
             log.error(f"插件卸载失败:{e}")
 
-    def getEvent():
+    def loadPlugin(pluginName: str):
         """
-        获取事件。
+        加载指定插件。
         """
-        global eventCache
-        return eventCache
+        try:
+            path = Path(__file__).resolve().parents[3] / "plugins" / pluginName
+            spec = importlib.util.spec_from_file_location("main", str(path / "main.py"))
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            # 动态实例化 Plugin 类
+            if hasattr(module, "Plugin"):
+                plugin_class = getattr(module, "Plugin")
+                # 实例化 Plugin 类
+                plugin_instance = plugin_class()
+                plugins.append(plugin_instance)
+                # 调用 onLoad 方法
+                plugin_instance.onLoad()
+        except Exception as e:
+            log.error(f"插件加载失败: {e}")
 
     def onEvent(event):
         """
         事件处理。
         """
-        global eventCache
-        eventCache = event
         for plugin in plugins:
             # 调用 onEvent 方法,判断是否阻止事件
             flag = plugin.onEvent(event)
-            if flag == True:
+            if flag:
                 # 阻止事件继续往下传递
                 return False
         # 允许事件继续往下传递
-        return True
+        return flag

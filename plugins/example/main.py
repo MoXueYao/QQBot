@@ -20,5 +20,5 @@ class Plugin(PluginBase):
     # 插件事件处理函数(在机器人进行事件处理前调用)
     def onEvent(self, event: FriendEvent) -> bool:
         event.message = MessageList([Text("你好")])
-        # 返回True表示其他插件/机器人不再处理此事件(False同理)
+        # 返回False表示其他插件/机器人不再处理此事件(True同理)
         return False
