@@ -1,4 +1,13 @@
-from pkg.core.bot.message import MessageList, Text, Face, Image, Record, At
+from pkg.core.bot.message import (
+    MessageList,
+    Text,
+    Face,
+    Image,
+    Record,
+    At,
+    Node,
+    NodeList,
+)
 from pkg.core.bot.event import FriendEvent, GroupEvent
 from pkg.core.bot.regfunc import regFriendHandler, regGroupHandler, regLoopHandler
 from pkg.core.command.regcmd import regCommand

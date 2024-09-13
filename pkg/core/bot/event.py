@@ -93,7 +93,7 @@ def group_eventHandler_run(*event: GroupEvent):
 
 def loopHandler_run():
     """
-    循环事件处理器主循环。
+    运行循环处理器。
     """
     while True:
         time.sleep(loop_interval)

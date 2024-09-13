@@ -100,6 +100,41 @@ class At:
         return f"[CQ:at,qq={self.at_id}]"
 
 
+class Node:
+    """
+    合并消息节点。
+
+    Args:
+        name (str): 发送者显示的名字。
+        uin (int): 发送者QQ 号。
+        content (str): 消息内容(目前仅支持文字)。
+
+    """
+
+    def __init__(self, name, uin, content):
+        self.name = name
+        self.uin = uin
+        self.content = content
+
+    def __str__(self) -> dict:
+        return f"[CQ:node,name={self.name},uin={self.uin},content={self.content}]"
+
+
+class NodeList:
+    """
+    合并消息。
+
+    Args:
+        array (list): 消息列表。
+    """
+
+    def __init__(self, array: list):
+        self.array = array
+
+    def __str__(self):
+        return "".join([str(node) for node in self.array])
+
+
 def toMessage(message: dict) -> Text | Image | Face | Record | At:
     """
     将消息转换为消息对象。

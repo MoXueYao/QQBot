@@ -123,10 +123,13 @@ class Listen:
         self.close(conn)
 
     def listen_run(self):
+        # 创建套接字
         so = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         so.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
         so.bind((self.host, self.port))
         so.listen(16)
+        # 循环接收数据
         while True:
+            # 接受连接,此处阻塞
             conn, addr = so.accept()
             self.listen(conn, addr)

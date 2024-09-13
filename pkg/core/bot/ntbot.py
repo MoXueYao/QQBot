@@ -1,5 +1,5 @@
 from pkg.core.bot.event import loopHandler_run, Handler_loop
-from pkg.core.bot.message import MessageList
+from pkg.core.bot.message import MessageList, NodeList
 from pkg.core.bot.server import Listen
 from pkg.tools.log import log
 from pkg.tools.post import post
@@ -23,7 +23,6 @@ class NTBot:
 
     def upListen_run(self):
         self.listen.listen_run()
-
 
     def send_group_msg(self, group_id: int, msg: MessageList | list):
         """
@@ -58,6 +57,17 @@ class NTBot:
             log.info(f"[好友{user_id}] <- {msg}")
         except:
             log.error(f"[好友{user_id}] <- {msg} 失败。")
+
+    def send_group_forward_msg(self, group_id: int, msgs: NodeList):
+        """
+        发送群聊自定义合并转发。
+        """
+        data = {"group_id": group_id, "messages": str(msgs)}
+        try:
+            post(self.host, self.target_port, "/send_group_forward_msg", data)
+            log.info(f"[群{group_id}] <- 发送合并转发")
+        except:
+            log.error(f"[群{group_id}] <- 发送合并转发失败。")
 
     def group_kick(self, group_id: int, user_id: int, reject_add_request: bool = False):
         """
@@ -115,7 +125,7 @@ class NTBot:
         """
         开始运行机器人。
         """
-        log.info(f"开始监听端口{self.target_port}...")
+        log.info(f"开始监听端口{self.listen.port}...")
         threading.Thread(target=self.listen.listen_run).start()
         if len(Handler_loop) > 0:
             log.info("开始运行循环事件处理程序...")
