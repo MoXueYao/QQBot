@@ -61,6 +61,10 @@ class NTBot:
     def send_group_forward_msg(self, group_id: int, msgs: NodeList):
         """
         发送群聊自定义合并转发。
+
+        Args:
+            group_id (int): 群号
+            msgs (NodeList): 合并消息
         """
         data = {"group_id": group_id, "messages": str(msgs)}
         try:
