@@ -119,6 +119,11 @@ class Node:
     def __str__(self) -> dict:
         return f"[CQ:node,name={self.name},uin={self.uin},content={self.content}]"
 
+    def __add__(self, other):
+        if isinstance(other, Node):
+            return NodeList([self, other])
+        raise TypeError(f"Node不能与{type(other)}相加")
+
 
 class NodeList:
     """
