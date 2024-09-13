@@ -38,7 +38,26 @@ def onHelp(event: GroupEvent | FriendEvent) -> None:
                 re_msg += f"/{cmd.cmd_name} - {cmd.description}\n"
         re_msg = re_msg[:-1]
         bot.send_friend_msg(event.sender.user_id, [Text(re_msg)])
+
+
+@regCommand("reload", "重载所有插件", 3)
+def onReload(event: GroupEvent | FriendEvent) -> None:
+    bot = BotManager.getBot()
+    try:
+        PluginManager.unLoadAllPlugin()
+        PluginManager.loadAllPlugin()
+    except:
+        if isinstance(event, GroupEvent):
+            bot.send_group_msg(event.group_id, [Text("重载失败,请检查控制台。")])
+            return
+        if isinstance(event, FriendEvent):
+            bot.send_friend_msg(event.sender.user_id, [Text("重载失败,请检查控制台。")])
         return
+    if isinstance(event, GroupEvent):
+        bot.send_group_msg(event.group_id, [Text("重载成功。")])
+        return
+    if isinstance(event, FriendEvent):
+        bot.send_friend_msg(event.sender.user_id, [Text("重载成功。")])
 
 
 @regNoCommand

@@ -17,8 +17,11 @@ class Plugin(PluginBase):
     def onLoad(self):
         log.info("测试插件加载成功。")
 
+    def onUnLoad(self):
+        log.info("测试插件卸载成功。")
+
     # 插件事件处理函数(在机器人进行事件处理前调用)
     def onEvent(self, event: FriendEvent) -> bool:
         event.message = MessageList([Text("你好")])
         # 返回False表示其他插件/机器人不再处理此事件(True同理)
-        return False
+        return True

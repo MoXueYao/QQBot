@@ -24,6 +24,7 @@ class NTBot:
     def upListen_run(self):
         self.listen.listen_run()
 
+
     def send_group_msg(self, group_id: int, msg: MessageList | list):
         """
         发送群消息。

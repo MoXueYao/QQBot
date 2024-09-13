@@ -36,12 +36,27 @@ class PluginManager:
                     if hasattr(module, "Plugin"):
                         plugin_class = getattr(module, "Plugin")
                         # 实例化 Plugin 类
-                        plugin_instance = plugin_class()
+                        plugin_instance: PluginBase = plugin_class()
+                        plugin_instance.name = plugin
                         plugins.append(plugin_instance)
                         # 调用 onLoad 方法
                         plugin_instance.onLoad()
                 except Exception as e:
                     log.error(f"插件加载失败: {e}")
+        print(plugins)
+
+    def unLoadAllPlugin():
+        """
+        卸载所有插件。
+        """
+        for plugin in plugins:
+            try:
+                plugin.onUnLoad()
+            except Exception as e:
+                log.warn(f"插件 {plugin.name} 的 Plugin 类缺少必要的 onUnLoad 方法")
+                log.error(f"插件卸载失败:{e}")
+                continue
+            plugins.remove(plugin)
 
     def unLoadPlugin(pluginName: str):
         """
@@ -65,6 +80,8 @@ class PluginManager:
                 plugins.remove(plugin)
         except Exception as e:
             log.error(f"插件卸载失败:{e}")
+            return
+        log.error(f"插件 {pluginName} 未找到")
 
     def loadPlugin(pluginName: str):
         """
@@ -80,7 +97,7 @@ class PluginManager:
             if hasattr(module, "Plugin"):
                 plugin_class = getattr(module, "Plugin")
                 # 实例化 Plugin 类
-                plugin_instance = plugin_class()
+                plugin_instance: PluginBase = plugin_class()
                 plugins.append(plugin_instance)
                 # 调用 onLoad 方法
                 plugin_instance.onLoad()
@@ -94,7 +111,7 @@ class PluginManager:
         for plugin in plugins:
             # 调用 onEvent 方法,判断是否阻止事件
             flag = plugin.onEvent(event)
-            if flag:
+            if not flag:
                 # 阻止事件继续往下传递
                 return False
         # 允许事件继续往下传递

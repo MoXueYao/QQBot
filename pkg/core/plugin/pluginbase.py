@@ -1,4 +1,6 @@
 class PluginBase:
+    name: str = None
+
     def onLoad(self):
         """
         插件加载时调用的函数。
