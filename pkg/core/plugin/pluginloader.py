@@ -15,6 +15,7 @@ class PluginManager:
     def loadAllPlugin():
         """
         加载所有插件。
+        
         读取文件中的插件(\plugins\插件名\main.py),并调用onLoad方法。
         """
         # 从上三层目录读取插件
@@ -43,7 +44,6 @@ class PluginManager:
                         plugin_instance.onLoad()
                 except Exception as e:
                     log.error(f"插件加载失败: {e}")
-        print(plugins)
 
     def unLoadAllPlugin():
         """
@@ -53,7 +53,6 @@ class PluginManager:
             try:
                 plugin.onUnLoad()
             except Exception as e:
-                log.warn(f"插件 {plugin.name} 的 Plugin 类缺少必要的 onUnLoad 方法")
                 log.error(f"插件卸载失败:{e}")
                 continue
             plugins.remove(plugin)

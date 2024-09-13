@@ -17,6 +17,7 @@ class Plugin(PluginBase):
     def onLoad(self):
         log.info("测试插件加载成功。")
 
+    # 插件卸载时调用
     def onUnLoad(self):
         log.info("测试插件卸载成功。")
 
