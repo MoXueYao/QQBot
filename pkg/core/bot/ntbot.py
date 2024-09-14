@@ -73,6 +73,21 @@ class NTBot:
         except:
             log.error(f"[群{group_id}] <- 发送合并转发失败。")
 
+    def send_private_forward_msg(self, user_id: int, msgs: NodeList):
+        """
+        发送好友自定义合并转发。
+
+        Args:
+            user_id (int): 用户id
+            msgs (NodeList): 合并消息
+        """
+        data = {"user_id": user_id, "messages": str(msgs)}
+        try:
+            post(self.host, self.target_port, "/send_private_forward_msg", data)
+            log.info(f"[好友{user_id}] <- 发送合并转发")
+        except:
+            log.error(f"[好友{user_id}] <- 发送合并转发失败。")
+
     def group_kick(self, group_id: int, user_id: int, reject_add_request: bool = False):
         """
         群踢人。
