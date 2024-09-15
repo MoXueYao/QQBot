@@ -1,5 +1,10 @@
-state: dict = {"event_transmit": True}  # 事件传递的状态
+state: list = [True]
+# state[0] 事件传递状态
 
 
 def setEventTransmit(value: bool) -> None:
-    state["event_transmit"] = value
+    state[0] = value
+
+
+def getEventTransmit() -> bool:
+    return state[0]
