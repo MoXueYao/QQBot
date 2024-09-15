@@ -38,5 +38,10 @@ def onFriendMsg(event: FriendEvent):
         bot.send_friend_msg(sender_id, Text("Hello World!") + Face(277))
 
 
+@regGroupHandler
+def onGroupMsg(event: GroupEvent):
+    pass
+
+
 # 启动机器人
 bot.start()

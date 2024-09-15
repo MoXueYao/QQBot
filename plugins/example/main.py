@@ -36,6 +36,10 @@ class Plugin(PluginBase):
     # 插件事件处理函数(在机器人进行事件处理前调用)
     # 技术力有限,请在event后加个下标0
     def onEvent(self, *event: FriendEvent):
+        # 如果该事件是命令则不做处理
+        if event[0].isCommand():
+            return
+
         # 设置事件是否继续传递
         setEventTransmit(True)
         event[0].message = MessageList([Text("你好")])

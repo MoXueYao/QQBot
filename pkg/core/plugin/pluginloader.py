@@ -1,6 +1,6 @@
 from pkg.core.plugin.pluginbase import PluginBase, plugins
 from pkg.tools.log import log
-from pkg.tools.state import state
+from pkg.tools.state import getEventTransmit
 import os
 import importlib.util
 from pathlib import Path
@@ -112,6 +112,6 @@ class PluginManager:
         """
         for plugin in plugins:
             threading.Thread(target=plugin.onEvent, args=(event,)).start()
-            if not state["event_transmit"]:
+            if not getEventTransmit():
                 # 阻止事件继续往下传递
                 return

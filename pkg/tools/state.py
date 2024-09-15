@@ -1,4 +1,4 @@
-state: list = [True]
+state: list = [True, True]
 # state[0] 事件传递状态
 
 
