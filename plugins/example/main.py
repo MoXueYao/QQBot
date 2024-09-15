@@ -4,6 +4,7 @@ from pkg.core.bot.message import Text, MessageList
 from pkg.core.bot.ntbot import BotManager
 from pkg.core.command.regcmd import regCommand, disableCommand
 from pkg.tools.log import log
+from pkg.tools.state import setEventTransmit
 
 
 # 插件的入口类
@@ -33,7 +34,8 @@ class Plugin(PluginBase):
         log.info("测试插件卸载成功。")
 
     # 插件事件处理函数(在机器人进行事件处理前调用)
-    def onEvent(self, event: FriendEvent) -> bool:
-        event.message = MessageList([Text("你好")])
-        # 返回False表示其他插件/机器人不再处理此事件(True同理)
-        return True
+    # 技术力有限,请在event后加个下标0
+    def onEvent(self, *event: FriendEvent):
+        # 设置事件是否继续传递
+        setEventTransmit(True)
+        event[0].message = MessageList([Text("你好")])

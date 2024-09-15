@@ -13,7 +13,7 @@ class PluginBase:
         """
         pass
 
-    def onEvent(self, event):
+    def onEvent(self, *event):
         """
         插件处理事件时调用的函数。
         """

@@ -1,8 +1,10 @@
 from pkg.core.plugin.pluginbase import PluginBase, plugins
 from pkg.tools.log import log
+from pkg.tools.state import state
 import os
 import importlib.util
 from pathlib import Path
+import threading
 
 
 class PluginManager:
@@ -109,10 +111,7 @@ class PluginManager:
         事件处理。
         """
         for plugin in plugins:
-            # 调用 onEvent 方法,判断是否阻止事件
-            flag = plugin.onEvent(event)
-            if not flag:
+            threading.Thread(target=plugin.onEvent, args=(event,)).start()
+            if not state["event_transmit"]:
                 # 阻止事件继续往下传递
-                return False
-        # 允许事件继续往下传递
-        return flag
+                return

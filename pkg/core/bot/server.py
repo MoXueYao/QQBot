@@ -14,6 +14,7 @@ from pkg.core.bot.event import (
 from pkg.core.plugin.pluginloader import PluginManager
 from pkg.config import only_At, Bot_QQ, admin, super_admin
 from pkg.tools.log import log
+from pkg.tools.state import state
 
 
 class Listen:
@@ -88,10 +89,9 @@ class Listen:
                 f"[群{data['group_id']}] -> {data['sender']['nickname']}:  {msgList} "
             )
             # 插件管理器处理事件
-            # 暂时未采用多进程处理事件
-            flag = PluginManager.onEvent(event)
+            PluginManager.onEvent(event)
             # 判断是否继续处理事件
-            if flag:
+            if state["event_transmit"]:
                 # 开启线程调用事件处理器处理事件
                 threading.Thread(target=group_eventHandler_run, args=(event,)).start()
         # 如果是好友消息
@@ -113,10 +113,9 @@ class Listen:
                 f"[好友{data['sender']['user_id']}] -> {data['sender']['nickname']}:  {msgList} "
             )
             # 插件管理器处理事件
-            # 暂时未采用多进程处理事件
-            flag = PluginManager.onEvent(event)
+            PluginManager.onEvent(event)
             # 判断是否继续处理事件
-            if flag:
+            if state["event_transmit"]:
                 # 开启线程调用事件处理器处理事件
                 threading.Thread(target=friend_eventHandler_run, args=(event,)).start()
         # 关闭连接
