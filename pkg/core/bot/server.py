@@ -64,12 +64,12 @@ class Listen:
                 # 消息列表去除第一个At消息
                 msgList.pop(0)
                 msg_list_oneMSG = msgList.messages[0]
-            # 如果消息的第一个字符为空格则去除空格
-            if (
-                isinstance(msg_list_oneMSG, Text)
-                and msg_list_oneMSG.text.find(" ") == 0
-            ):
-                msg_list_oneMSG.text = msg_list_oneMSG.text[1:]
+                # 如果消息的第一个字符为空格则去除空格
+                if (
+                    isinstance(msg_list_oneMSG, Text)
+                    and msg_list_oneMSG.text.find(" ") == 0
+                ):
+                    msg_list_oneMSG.text = msg_list_oneMSG.text[1:]
             # 创建事件对象
             event = GroupEvent(
                 Sender(
