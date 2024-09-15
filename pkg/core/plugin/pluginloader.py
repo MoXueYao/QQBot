@@ -77,6 +77,7 @@ class PluginManager:
                             f"插件 {pluginName} 的 Plugin 类缺少必要的 onUnLoad 方法"
                         )
                 plugins.remove(plugin)
+                return
         except Exception as e:
             log.error(f"插件卸载失败:{e}")
             return
