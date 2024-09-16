@@ -20,9 +20,15 @@ class GroupEvent:
         return "group"
 
     def isCommand(self) -> bool:
+        """
+        判断该事件是否为命令事件。
+        """
         return self.message.find(command_prefix) == 0
 
     def getCommand(self) -> Command:
+        """
+        从事件中获取命令。
+        """
         for i in command_list:
             if i.cmd_name == str(self.message)[1:]:
                 return i
@@ -41,9 +47,15 @@ class FriendEvent:
         return "private"
 
     def isCommand(self) -> bool:
+        """
+        判断该事件是否为命令事件。
+        """
         return self.message.find(command_prefix) == 0
 
     def getCommand(self) -> Command:
+        """
+        从事件中获取命令。
+        """
         for i in command_list:
             if i.cmd_name == str(self.message)[1:]:
                 return i

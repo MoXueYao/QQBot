@@ -11,6 +11,7 @@
  - 首先下载安装NT版QQ，你可以访问 https://im.qq.com/pcqq/index.shtml/ 来下载安装
  - 自行寻找并安装`NapCat`在电脑的任意位置。
  - 运行`...\NapCat\`中的`start.ps1`并登录你的QQ。
+ - 如果没有，则说明你的版本更新，请自行查看NapCat的官方文档来尝试登陆。
  - 打开`...\NapCat\config\onebot11_你的qq号.json`然后参考如下方式将HTTP部分修改为：
  ```
     "enable": true,
