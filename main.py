@@ -5,6 +5,7 @@ from pkg.core.bot.message import (
     Image,
     Record,
     At,
+    Video,
     Node,
     NodeList,
 )

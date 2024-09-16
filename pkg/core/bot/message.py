@@ -12,7 +12,7 @@ class Text:
     def __add__(self, other):
         if isinstance(other, Text):
             return Text(self.text + other.text)
-        if isinstance(other, (Image, Record, Face, At)):
+        if isinstance(other, (Image, Record, Face, At, Video)):
             return MessageList([self, other])
         raise TypeError(f"Text不能与{type(other)}相加")
 
@@ -32,7 +32,7 @@ class Image:
         self.image_url = image_url
 
     def __add__(self, other):
-        if isinstance(other, (Text, Record, Face, At, Image)):
+        if isinstance(other, (Text, Record, Face, At, Image, Video)):
             return MessageList([self, other])
         raise TypeError(f"Image不能与{type(other)}相加")
 
@@ -52,7 +52,7 @@ class Face:
         self.face_id = face_id
 
     def __add__(self, other):
-        if isinstance(other, (Text, Record, Image, At, Face)):
+        if isinstance(other, (Text, Record, Image, At, Face, Video)):
             return MessageList([self, other])
         raise TypeError(f"Face不能与{type(other)}相加")
 
@@ -72,12 +72,32 @@ class Record:
         self.record_url = record_url
 
     def __add__(self, other):
-        if isinstance(other, (Text, Image, Face, At, Record)):
+        if isinstance(other, (Text, Image, Face, At, Record, Video)):
             return MessageList([self, other])
         raise TypeError(f"Record不能与{type(other)}相加")
 
     def __str__(self) -> str:
         return f"[CQ:record,file={self.record_url}]"
+
+
+class Video:
+    """
+    视频消息。
+
+    Args:
+        video_url (str): 视频链接。
+    """
+
+    def __init__(self, video_url: str):
+        self.video_url = video_url
+
+    def __add__(self, other):
+        if isinstance(other, (Text, Image, Face, Record, At, Video)):
+            return MessageList([self, other])
+        raise TypeError(f"Record不能与{type(other)}相加")
+
+    def __str__(self) -> str:
+        return f"[CQ:video,file={self.video_url}]"
 
 
 class At:
@@ -100,46 +120,6 @@ class At:
         return f"[CQ:at,qq={self.at_id}]"
 
 
-class Node:
-    """
-    合并消息节点。
-
-    Args:
-        name (str): 发送者显示的名字。
-        uin (int): 发送者QQ 号。
-        content (str): 消息内容(目前仅支持文字)。
-
-    """
-
-    def __init__(self, name, uin, content):
-        self.name = name
-        self.uin = uin
-        self.content = content
-
-    def __str__(self) -> dict:
-        return f"[CQ:node,name={self.name},uin={self.uin},content={self.content}]"
-
-    def __add__(self, other):
-        if isinstance(other, Node):
-            return NodeList([self, other])
-        raise TypeError(f"Node不能与{type(other)}相加")
-
-
-class NodeList:
-    """
-    合并消息。
-
-    Args:
-        array (list): 消息列表。
-    """
-
-    def __init__(self, array: list):
-        self.array = array
-
-    def __str__(self):
-        return "".join([str(node) for node in self.array])
-
-
 def toMessage(message: dict) -> Text | Image | Face | Record | At:
     """
     将消息转换为消息对象。
@@ -154,6 +134,8 @@ def toMessage(message: dict) -> Text | Image | Face | Record | At:
         return Record(message["data"]["file"])
     if message["type"] == "at":
         return At(int(message["data"]["qq"]))
+    if message["type"] == "video":
+        return Video(message["data"]["url"])
 
 
 class MessageList:
@@ -179,6 +161,16 @@ class MessageList:
             return
         if isinstance(message, (Text, Image, Face, Record, At)):
             self.messages.append(message)
+
+    def replace(self, traget_text: str, text: str) -> str:
+        """
+        替换消息列表中的消息。
+
+        Args:
+            traget_text (str): 要替换的文本。
+            text (str): 替换为的文本。
+        """
+        return str(self).replace(traget_text, text)
 
     def __str__(self) -> str:
         return "".join([str(message) for message in self.messages])
@@ -300,3 +292,43 @@ class MessageList:
             index (int): 弹出的消息的索引。默认为 0。
         """
         return self.messages.pop(index)
+
+
+class Node:
+    """
+    合并消息节点。
+
+    Args:
+        name (str): 发送者显示的名字。
+        uin (int): 发送者QQ 号。
+        content (MessageList): 消息内容。
+    """
+
+    def __init__(self, name: str, uin: int, content: MessageList):
+        self.name = name
+        self.uin = uin
+        # 对content进行转义
+        self.content = content.replace("&", "&amp;").replace("[", "&#91;").replace("]", "&#93;")
+
+    def __str__(self) -> dict:
+        return f"[CQ:node,nickname={self.name},user_id={self.uin},content={self.content}]"
+
+    def __add__(self, other):
+        if isinstance(other, Node):
+            return NodeList([self, other])
+        raise TypeError(f"Node不能与{type(other)}相加")
+
+
+class NodeList:
+    """
+    合并消息。
+
+    Args:
+        array (list): 消息列表。
+    """
+
+    def __init__(self, array: list):
+        self.array = array
+
+    def __str__(self):
+        return "".join([str(node) for node in self.array])
