@@ -29,12 +29,10 @@ def regCommand(name: str, description: str = "", permission: int = 1):
 
 def disableCommand(name: str) -> bool:
     """
-    注销命令。
+    销毁命令。
 
     Args:
         name (str): 命令名。
-
-    Return (bool): 是否注销成功。
     """
     for cmd in command_list:
         if cmd.cmd_name == name:

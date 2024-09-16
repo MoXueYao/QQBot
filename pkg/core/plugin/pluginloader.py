@@ -110,6 +110,9 @@ class PluginManager:
         """
         事件处理。
         """
+        # 如果是命令则不做处理
+        if event.isCommand():
+            return
         for plugin in plugins:
             threading.Thread(target=plugin.onEvent, args=(event,)).start()
             if not getEventTransmit():
