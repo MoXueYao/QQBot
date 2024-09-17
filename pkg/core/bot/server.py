@@ -45,7 +45,7 @@ class Listen:
             return
 
         # 判断消息列表是否为空
-        if len(msgList.messages) == 0:
+        if msgList.len == 0:
             log.warn("暂未支持的消息类型。")
             self.close(conn)
             return

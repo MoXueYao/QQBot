@@ -145,6 +145,7 @@ class MessageList:
 
     def __init__(self, messages: list):
         self.messages = messages
+        self.len = len(messages)
 
     def __add__(self, other):
         if isinstance(other, MessageList):
@@ -161,6 +162,7 @@ class MessageList:
             return
         if isinstance(message, (Text, Image, Face, Record, At)):
             self.messages.append(message)
+        self.len += 1
 
     def replace(self, traget_text: str, text: str) -> str:
         """
@@ -177,6 +179,9 @@ class MessageList:
 
     def __eq__(self, text: str) -> bool:
         return str(self) == str(text)
+
+    def __getitem__(self, index: int):
+        return self.messages[index]
 
     def find(self, text: str) -> int:
         """
@@ -291,7 +296,9 @@ class MessageList:
         Args:
             index (int): 弹出的消息的索引。默认为 0。
         """
-        return self.messages.pop(index)
+        o = self.messages.pop(index)
+        self.len = len(self.messages)
+        return o
 
 
 class Node:
@@ -299,19 +306,25 @@ class Node:
     合并消息节点。
 
     Args:
-        name (str): 发送者显示的名字。
-        uin (int): 发送者QQ 号。
+        user_name (str): 发送者显示的名字。
+        user_id (int): 发送者QQ 号。
         content (MessageList): 消息内容。
     """
 
-    def __init__(self, name: str, uin: int, content: MessageList):
-        self.name = name
-        self.uin = uin
-        # 对content进行转义
-        self.content = content.replace("&", "&amp;").replace("[", "&#91;").replace("]", "&#93;")
+    def __init__(self, user_name: str, user_id: int, content: MessageList):
+        self.user_name = user_name
+        self.user_id = user_id
+        self.content = content
 
     def __str__(self) -> dict:
-        return f"[CQ:node,nickname={self.name},user_id={self.uin},content={self.content}]"
+        if not self.content.onlyText():
+            content = (
+                self.content.replace("&", "&amp;")
+                .replace("[", "&#91;")
+                .replace("]", "&#93;")
+            )
+            return f"[CQ:node,nickname={self.user_name},user_id={self.user_id},content={content}]"
+        return f"[CQ:node,nickname={self.user_name},user_id={self.user_id},content={self.content}]"
 
     def __add__(self, other):
         if isinstance(other, Node):
@@ -332,3 +345,6 @@ class NodeList:
 
     def __str__(self):
         return "".join([str(node) for node in self.array])
+
+    def __getitem__(self, index):
+        return self.array[index]
