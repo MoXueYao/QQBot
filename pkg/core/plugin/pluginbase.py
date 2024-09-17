@@ -1,5 +1,4 @@
 class PluginBase:
-    name: str = None
 
     def onLoad(self):
         """

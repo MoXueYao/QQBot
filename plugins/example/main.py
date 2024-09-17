@@ -15,6 +15,10 @@ class Plugin(PluginBase):
     将收到的任意消息修改为"你好"。
     """
 
+    def __init__(self):
+        # 需要有name属性
+        self.name = ""
+
     # 插件加载时调用(即机器人启动时)
     def onLoad(self):
         # 注册插件的命令
