@@ -24,7 +24,7 @@ class Command:
         self.func = func
         self.description = description
         self.scope = scope
-        self.owner = owner
+        self.owner = str(owner)
         self.permission = permission
 
     def run(self, *args):
