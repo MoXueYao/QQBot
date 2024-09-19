@@ -19,7 +19,7 @@ bot = Init("127.0.0.1", 8080, 3000)
 
 
 # 注册好友消息处理函数(注册其他同理)
-@regFriendHandler
+@regFriendHandler()
 def onFriendMsg(event: FriendEvent):
     """
     这只是一个示例。
@@ -39,7 +39,7 @@ def onFriendMsg(event: FriendEvent):
         bot.send_friend_msg(sender_id, Text("Hello World!") + Face(277))
 
 
-@regGroupHandler
+@regGroupHandler()
 def onGroupMsg(event: GroupEvent):
     pass
 
