@@ -21,26 +21,26 @@ def Init(host: str, port: int, target_port: int) -> NTBot:
     return bot
 
 
-@regCommand("help", "查看命令帮助", group=False)
+@regCommand("help", "查看命令帮助")
 def onHelp(event: GroupEvent | FriendEvent) -> None:
     bot = BotManager.getBot()
     re_msg = "帮助菜单:\n"
     if isinstance(event, GroupEvent):
         for cmd in command_list:
-            if cmd.description != "" and cmd.isGroup():
+            if cmd.description != "" and (cmd.isGroup() or cmd.isPublic()):
                 re_msg += f"/{cmd.cmd_name} - {cmd.description}\n"
         re_msg = re_msg[:-1]
         bot.send_group_msg(event.group_id, [Text(re_msg)])
         return
     if isinstance(event, FriendEvent):
         for cmd in command_list:
-            if cmd.description != "" and cmd.isFriend():
+            if cmd.description != "" and (cmd.isFriend() or cmd.isPublic()):
                 re_msg += f"/{cmd.cmd_name} - {cmd.description}\n"
         re_msg = re_msg[:-1]
         bot.send_friend_msg(event.sender.user_id, [Text(re_msg)])
 
 
-@regCommand("reload", "重载所有插件", group=False, permission=3)
+@regCommand("reload", "重载所有插件", permission=3)
 def onReload(event: GroupEvent | FriendEvent) -> None:
     bot = BotManager.getBot()
     try:
