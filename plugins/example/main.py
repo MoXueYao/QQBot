@@ -8,6 +8,8 @@ from pkg.tools.state import setEventTransmit
 
 
 # 插件的入口类
+# 插件类必须继承PluginBase
+# 插件类请不要重写plugin_name属性
 class Plugin(PluginBase):
     """
     测试插件。
