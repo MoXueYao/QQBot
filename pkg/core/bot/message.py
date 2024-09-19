@@ -315,7 +315,7 @@ class Node:
         self.user_name = user_name
         self.user_id = user_id
         if isinstance(content, str):
-            self.content = MessageList(Text(content))
+            self.content = MessageList([Text(content)])
             return
         if isinstance(content, (Text, Image, At, Video, Face, Record)):
             self.content = MessageList([content])
