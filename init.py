@@ -34,7 +34,7 @@ def onHelp(event: GroupEvent | FriendEvent) -> None:
         return
     if isinstance(event, FriendEvent):
         for cmd in command_list:
-            if cmd.description != "" and not cmd.isGroup():
+            if cmd.description != "" and cmd.isFriend():
                 re_msg += f"/{cmd.cmd_name} - {cmd.description}\n"
         re_msg = re_msg[:-1]
         bot.send_friend_msg(event.sender.user_id, [Text(re_msg)])

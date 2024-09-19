@@ -5,8 +5,9 @@ class Command:
     Args:
         cmd_name (str): 命令名
         func (callable): 命令函数
-        description (str, optional): 命令描述. Defaults to "".
-        permission (int, optional): 权限. Defaults to 1.
+        description (str, optional): 命令描述.
+        scope (str): 命令作用域. 可以是 public, group, friend.
+        permission (int, optional): 权限.
     """
 
     def __init__(
@@ -14,20 +15,26 @@ class Command:
         cmd_name: str,
         func,
         description: str = "",
-        group: bool = True,
+        scope: str = "public",
         permission: int = 1,
     ):
         self.cmd_name = cmd_name
         self.func = func
         self.description = description
-        self.group = group
+        self.scope = scope
         self.permission = permission
 
     def run(self, *args):
         self.func(*args)
 
     def isGroup(self):
-        return self.group
+        return self.scope == "group"
+
+    def isFriend(self):
+        return self.scope == "friend"
+
+    def isPublic(self):
+        return self.scope == "public"
 
 
 command_list: list[Command] = []

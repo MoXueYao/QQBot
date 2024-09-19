@@ -2,7 +2,7 @@ from pkg.core.command.command import Command, regNoCommand, command_list
 
 
 def regCommand(
-    name: str, description: str = "", group: bool = True, permission: int = 1
+    name: str, description: str = "", scope: str = "public", permission: int = 1
 ):
     """
     注册命令。
@@ -14,9 +14,9 @@ def regCommand(
 
     Args:
         name (str): 命令名。
-        description (str): 命令描述。默认为"".
-        group (bool): 是否为群聊命令。默认为True.
-        permission (int): 权限等级。默认为1.
+        description (str): 命令描述。.
+        scope (str): 命令作用域. 可以是 public, group, friend.
+        permission (int): 权限等级。.
             1:普通用户
             2:管理员
             3:超级管理员
@@ -25,7 +25,9 @@ def regCommand(
     def cmd_func(func):
         if name == "" or name is None:
             raise Exception("没有指定命令名。")
-        command_list.append(Command(name, func, description, group, permission))
+        if scope not in ["public", "group", "friend"]:
+            raise Exception("命令作用域不正确。")
+        command_list.append(Command(name, func, description, scope, permission))
 
     return cmd_func
 

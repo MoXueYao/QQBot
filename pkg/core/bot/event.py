@@ -73,7 +73,7 @@ def friend_eventHandler_run(*event: FriendEvent):
     """
     if event[0].isCommand():  # 如果是命令
         cmd = event[0].getCommand()
-        if cmd is None or cmd.isGroup():  # 如果命令不存在
+        if cmd is None or (not cmd.isFriend() and not cmd.isPublic()):  # 如果命令不存在
             noCommand[0].run(event[0])
             return
         if cmd.permission > event[0].sender.permission:  # 如果权限不足
@@ -91,7 +91,7 @@ def group_eventHandler_run(*event: GroupEvent):
     """
     if event[0].isCommand():  # 如果是命令
         cmd = event[0].getCommand()
-        if cmd is None or not cmd.isGroup():  # 如果命令不存在
+        if cmd is None or (not cmd.isGroup() and not cmd.isPublic()):  # 如果命令不存在
             noCommand[0].run(event[0])
             return
         if cmd.permission > event[0].sender.permission:  # 如果权限不足
