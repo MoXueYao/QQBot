@@ -5,8 +5,9 @@ class Command:
     Args:
         cmd_name (str): 命令名
         func (callable): 命令函数
-        description (str, optional): 命令描述.
+        description (str): 命令描述.
         scope (str): 命令作用域. 可以是 public, group, friend.
+        owner (str): 命令拥有者.
         permission (int, optional): 权限.
     """
 
@@ -16,12 +17,14 @@ class Command:
         func,
         description: str = "",
         scope: str = "public",
+        owner: str = "main",
         permission: int = 1,
     ):
         self.cmd_name = cmd_name
         self.func = func
         self.description = description
         self.scope = scope
+        self.owner = owner
         self.permission = permission
 
     def run(self, *args):

@@ -1,6 +1,8 @@
 from pkg.core.plugin.pluginbase import PluginBase, plugins
 from pkg.tools.log import log
 from pkg.tools.state import getEventTransmit
+from pkg.core.bot.regfunc import disableHandler
+from pkg.core.command.regcmd import disableCommandByOwner
 import os
 import importlib.util
 from pathlib import Path
@@ -54,6 +56,8 @@ class PluginManager:
         for plugin in plugins:
             try:
                 plugin.onUnLoad()
+                disableHandler(owner=plugin)
+                disableCommandByOwner(owner=plugin)
             except Exception as e:
                 log.error(f"卸载错误:{e}")
                 continue
@@ -74,6 +78,8 @@ class PluginManager:
                     ):
                         # 调用 onUnLoad 方法
                         plugin.onUnLoad()
+                        disableHandler(owner=plugin)
+                        disableCommandByOwner(owner=plugin)
                     else:
                         log.error(
                             f"插件 {pluginName} 的 Plugin 类缺少必要的 onUnLoad 方法"

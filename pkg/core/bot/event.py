@@ -15,6 +15,7 @@ class GroupEvent:
         self.sender = sender
         self.message = message
         self.group_id = group_id
+        self.args = []
 
     def getType(self) -> str:
         return "group"
@@ -29,8 +30,14 @@ class GroupEvent:
         """
         从事件中获取命令。
         """
+        # 解析命令
+        cmd_split: list[str] = str(self.message).split(" ")
+
         for i in command_list:
-            if i.cmd_name == str(self.message)[1:]:
+            if i.cmd_name == cmd_split[0][1:]:
+                if len(cmd_split) > 1:
+                    # 获取命令参数
+                    self.args = cmd_split[1:]
                 return i
 
 
@@ -42,6 +49,7 @@ class FriendEvent:
     def __init__(self, sender: Sender, message: MessageList):
         self.sender = sender
         self.message = message
+        self.args = []
 
     def getType(self) -> str:
         return "private"
@@ -56,8 +64,12 @@ class FriendEvent:
         """
         从事件中获取命令。
         """
+        cmd_split: list[str] = str(self.message).split(" ")
+
         for i in command_list:
-            if i.cmd_name == str(self.message)[1:]:
+            if i.cmd_name == cmd_split[0][1:]:
+                if len(cmd_split) > 1:
+                    self.args = cmd_split[1:]
                 return i
 
 
@@ -82,7 +94,7 @@ def friend_eventHandler_run(*event: FriendEvent):
         cmd.run(event[0])
         return
     for func in eventHandler_friend:
-        threading.Thread(target=func, args=event).start()
+        threading.Thread(target=func.run, args=event).start()
 
 
 def group_eventHandler_run(*event: GroupEvent):
@@ -100,7 +112,7 @@ def group_eventHandler_run(*event: GroupEvent):
         cmd.run(event[0])
         return
     for func in eventHandler_group:
-        threading.Thread(target=func, args=event).start()
+        threading.Thread(target=func.run, args=event).start()
 
 
 def loopHandler_run():
@@ -110,4 +122,4 @@ def loopHandler_run():
     while True:
         time.sleep(loop_interval)
         for func in Handler_loop:
-            threading.Thread(target=func).start()
+            threading.Thread(target=func.run).start()
