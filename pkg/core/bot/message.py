@@ -311,12 +311,19 @@ class Node:
         content (MessageList): 消息内容。
     """
 
-    def __init__(self, user_name: str, user_id: int, content: MessageList):
+    def __init__(self, user_name: str, user_id: int, content: MessageList | str):
         self.user_name = user_name
         self.user_id = user_id
-        self.content = content
+        if isinstance(content, str):
+            self.content = MessageList(Text(content))
+            return
+        if isinstance(content, (Text, Image, At, Video, Face, Record)):
+            self.content = MessageList([content])
+            return
+        if isinstance(content, MessageList):
+            self.content = content
 
-    def __str__(self) -> dict:
+    def __str__(self):
         if not self.content.onlyText():
             content = (
                 self.content.replace("&", "&amp;")

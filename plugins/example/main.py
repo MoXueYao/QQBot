@@ -22,7 +22,7 @@ class Plugin(PluginBase):
     # 插件加载时调用(即机器人启动时)
     def onLoad(self):
         # 注册插件的命令
-        @regCommand("test", "测试插件的测试命令。", permission=1)
+        @regCommand("test", "测试插件的测试命令。")
         def onTest(event: FriendEvent):
             log.info("测试插件收到命令。")
 
