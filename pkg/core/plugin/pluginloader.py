@@ -42,7 +42,7 @@ class PluginManager:
                         plugin_class = getattr(module, "Plugin")
                         # 实例化 Plugin 类
                         plugin_instance: PluginBase = plugin_class()
-                        plugin_instance.name = plugin
+                        plugin_instance.plugin_name = plugin
                         plugins.append(plugin_instance)
                         # 调用 onLoad 方法
                         plugin_instance.onLoad()

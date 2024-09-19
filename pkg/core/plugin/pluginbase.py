@@ -1,10 +1,10 @@
 class PluginBase:
 
     def __init__(self):
-        self.name = "PluginBase"
+        self.plugin_name = "PluginBase"
 
     def __str__(self):
-        return self.name
+        return self.plugin_name
 
     def onLoad(self):
         """
