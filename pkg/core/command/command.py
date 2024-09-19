@@ -9,14 +9,25 @@ class Command:
         permission (int, optional): 权限. Defaults to 1.
     """
 
-    def __init__(self, cmd_name: str, func, description: str = "", permission: int = 1):
+    def __init__(
+        self,
+        cmd_name: str,
+        func,
+        description: str = "",
+        group: bool = True,
+        permission: int = 1,
+    ):
         self.cmd_name = cmd_name
         self.func = func
         self.description = description
+        self.group = group
         self.permission = permission
 
     def run(self, *args):
         self.func(*args)
+
+    def isGroup(self):
+        return self.group
 
 
 command_list: list[Command] = []
