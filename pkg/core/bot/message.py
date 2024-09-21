@@ -4,19 +4,23 @@ class Text:
 
     Args:
         text (str): 文本内容。
+        escape (bool): 是否转义。
     """
 
-    def __init__(self, text: str):
+    def __init__(self, text: str, escape: bool = False):
         self.text = text
+        self.escape = escape
 
     def __add__(self, other):
         if isinstance(other, Text):
-            return Text(self.text + other.text)
+            return Text(self.text + other.text, self.escape)
         if isinstance(other, (Image, Record, Face, At, Video)):
             return MessageList([self, other])
         raise TypeError(f"Text不能与{type(other)}相加")
 
     def __str__(self) -> str:
+        if self.escape:
+            return self.text.replace("&", "&amp;").replace(",", "&#44;").replace("[", "&#91;").replace("]", "&#93;")
         return self.text
 
 
@@ -28,8 +32,9 @@ class Image:
         image_url (str): 图片链接。
     """
 
-    def __init__(self, image_url: str):
+    def __init__(self, image_url: str, escape: bool = False):
         self.image_url = image_url
+        self.escape = escape
 
     def __add__(self, other):
         if isinstance(other, (Text, Record, Face, At, Image, Video)):
@@ -37,6 +42,9 @@ class Image:
         raise TypeError(f"Image不能与{type(other)}相加")
 
     def __str__(self) -> str:
+        if self.escape:
+            url = self.image_url.replace("&", "&amp;")
+            return f"&#91;CQ:image&#44;file={url}&#93;"
         return f"[CQ:image,file={self.image_url}]"
 
 
@@ -48,8 +56,9 @@ class Face:
         face_id (str): 表情 ID。
     """
 
-    def __init__(self, face_id: int):
+    def __init__(self, face_id: int, escape: bool = False):
         self.face_id = face_id
+        self.escape = escape
 
     def __add__(self, other):
         if isinstance(other, (Text, Record, Image, At, Face, Video)):
@@ -57,6 +66,8 @@ class Face:
         raise TypeError(f"Face不能与{type(other)}相加")
 
     def __str__(self) -> str:
+        if self.escape:
+            return f"&#91;CQ:face&#44;id={self.face_id}&#93;"
         return f"[CQ:face,id={self.face_id}]"
 
 
@@ -68,8 +79,9 @@ class Record:
         record_url (str): 语音链接。
     """
 
-    def __init__(self, record_url: str):
+    def __init__(self, record_url: str, escape: bool = False):
         self.record_url = record_url
+        self.escape = escape
 
     def __add__(self, other):
         if isinstance(other, (Text, Image, Face, At, Record, Video)):
@@ -77,6 +89,9 @@ class Record:
         raise TypeError(f"Record不能与{type(other)}相加")
 
     def __str__(self) -> str:
+        if self.escape:
+            url = self.record_url.replace("&", "&amp;")
+            return f"&#91;CQ:record&#44;file={url}&#93;"
         return f"[CQ:record,file={self.record_url}]"
 
 
@@ -88,8 +103,9 @@ class Video:
         video_url (str): 视频链接。
     """
 
-    def __init__(self, video_url: str):
+    def __init__(self, video_url: str, escape: bool = False):
         self.video_url = video_url
+        self.escape = escape
 
     def __add__(self, other):
         if isinstance(other, (Text, Image, Face, Record, At, Video)):
@@ -97,6 +113,9 @@ class Video:
         raise TypeError(f"Record不能与{type(other)}相加")
 
     def __str__(self) -> str:
+        if self.escape:
+            url = self.video_url.replace("&", "&amp;")
+            return f"&#91;CQ:video&#44;file={url}&#93;"
         return f"[CQ:video,file={self.video_url}]"
 
 
@@ -108,8 +127,9 @@ class At:
         at_id (str): 被@的 ID。
     """
 
-    def __init__(self, at_id: int):
+    def __init__(self, at_id: int, escape: bool = False):
         self.at_id = at_id
+        self.escape = escape
 
     def __add__(self, other):
         if isinstance(other, (Text, Image, Face, Record, At)):
@@ -117,6 +137,8 @@ class At:
         raise TypeError(f"At不能与{type(other)}相加")
 
     def __str__(self) -> dict:
+        if self.escape:
+            return f"&#91;CQ:at&#44;qq={self.at_id}&#93;"
         return f"[CQ:at,qq={self.at_id}]"
 
 
@@ -163,16 +185,6 @@ class MessageList:
         if isinstance(message, (Text, Image, Face, Record, At)):
             self.messages.append(message)
         self.len += 1
-
-    def replace(self, traget_text: str, text: str) -> str:
-        """
-        替换消息列表中的消息。
-
-        Args:
-            traget_text (str): 要替换的文本。
-            text (str): 替换为的文本。
-        """
-        return str(self).replace(traget_text, text)
 
     def __str__(self) -> str:
         return "".join([str(message) for message in self.messages])
@@ -324,13 +336,6 @@ class Node:
             self.content = content
 
     def __str__(self):
-        if not self.content.onlyText():
-            content = (
-                self.content.replace("&", "&amp;")
-                .replace("[", "&#91;")
-                .replace("]", "&#93;")
-            )
-            return f"[CQ:node,nickname={self.user_name},user_id={self.user_id},content={content}]"
         return f"[CQ:node,nickname={self.user_name},user_id={self.user_id},content={self.content}]"
 
     def __add__(self, other):
