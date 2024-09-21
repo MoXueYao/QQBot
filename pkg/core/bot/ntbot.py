@@ -24,7 +24,7 @@ class NTBot:
     def upListen_run(self):
         self.listen.listen_run()
 
-    def send_group_msg(self, group_id: int, msg: MessageList | list):
+    def send_group_msg(self, group_id: int, msg: MessageList | list | NodeList):
         """
         发送群消息。
 
@@ -41,7 +41,7 @@ class NTBot:
         except:
             log.error(f"[群{group_id}] <- {msg} 失败。")
 
-    def send_friend_msg(self, user_id: int, msg: MessageList | list):
+    def send_friend_msg(self, user_id: int, msg: MessageList | list | NodeList):
         """
         发送好友消息。
 
