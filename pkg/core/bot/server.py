@@ -29,7 +29,12 @@ class Listen:
 
     def listen(self, conn: socket.socket, addr):
         # 接收数据
-        data: dict = json.loads(conn.recv(4096).decode().split("\r\n\r\n")[1])
+        try:
+            data: dict = json.loads(conn.recv(4096).decode().split("\r\n\r\n")[1])
+        except:
+            log.error("数据解析失败。")
+            conn.close()
+            return
         # 判断数据是否为空
         if not data:
             log.error("数据为空。")
