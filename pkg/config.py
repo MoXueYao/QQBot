@@ -9,3 +9,4 @@ admin = []              # 管理员QQ
 command_prefix = "/"    # 命令前缀
 only_At = True          # 是否仅允许被@时触发
 Bot_QQ = 1234567890     # 机器人QQ(仅在only_At为True时生效)
+group_list = []         # 机器人生效的群

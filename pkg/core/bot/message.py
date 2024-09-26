@@ -20,7 +20,12 @@ class Text:
 
     def __str__(self) -> str:
         if self.escape:
-            return self.text.replace("&", "&amp;").replace(",", "&#44;").replace("[", "&#91;").replace("]", "&#93;")
+            return (
+                self.text.replace("&", "&amp;")
+                .replace(",", "&#44;")
+                .replace("[", "&#91;")
+                .replace("]", "&#93;")
+            )
         return self.text
 
 
@@ -142,7 +147,7 @@ class At:
         return f"[CQ:at,qq={self.at_id}]"
 
 
-def toMessage(message: dict) -> Text | Image | Face | Record | At:
+def toMessage(message: dict) -> Text | Image | Face | Record | At | Video:
     """
     将消息转换为消息对象。
     """

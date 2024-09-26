@@ -19,8 +19,9 @@ class Plugin(PluginBase):
 
     # 插件加载时调用(即机器人启动时)
     def onLoad(self):
+
         # 注册插件的命令、事件处理器,记得填写owner参数
-        @regCommand("test", "测试插件的测试命令。", owner=self)
+        @regCommand("test", "这是测试的命令。", owner=self)
         def onTest(event: FriendEvent):
             log.info("测试插件收到命令。")
 

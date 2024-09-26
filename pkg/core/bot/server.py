@@ -12,7 +12,7 @@ from pkg.core.bot.event import (
     friend_eventHandler_run,
 )
 from pkg.core.plugin.pluginloader import PluginManager
-from pkg.config import only_At, Bot_QQ, admin, super_admin
+from pkg.config import only_At, Bot_QQ, admin, super_admin, group_list
 from pkg.tools.log import log
 from pkg.tools.state import getEventTransmit
 
@@ -57,7 +57,11 @@ class Listen:
 
         # 如果是群消息
         if data["message_type"] == "group" and len(eventHandler_group) != 0:
-            # 根据config中的only_At参数判断是否做出响应
+            # 根据config中的group_list参数判断是否做出响应
+            if data["group_id"] not in group_list:
+                self.close(conn)
+                return
+            # 根据config中的at参数判断是否做出响应
             if (
                 only_At
                 and msgList.getAt(True) == None
