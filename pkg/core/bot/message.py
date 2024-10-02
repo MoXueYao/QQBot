@@ -129,7 +129,7 @@ class At:
     @消息。
 
     Args:
-        at_id (str): 被@的 ID。
+        at_id (str): 被@的 ID。(如果为 0,则为全体成员)
     """
 
     def __init__(self, at_id: int, escape: bool = False):
@@ -143,7 +143,11 @@ class At:
 
     def __str__(self) -> dict:
         if self.escape:
+            if self.at_id == 0:
+                return f"&#91;CQ:at&#44;qq=all&#93;"
             return f"&#91;CQ:at&#44;qq={self.at_id}&#93;"
+        if self.at_id == 0:
+            return f"[CQ:at,qq=all]"
         return f"[CQ:at,qq={self.at_id}]"
 
 
