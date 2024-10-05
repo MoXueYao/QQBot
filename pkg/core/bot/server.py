@@ -14,7 +14,7 @@ from pkg.core.bot.event import (
 from pkg.core.plugin.pluginloader import PluginManager
 from pkg.config import only_At, Bot_QQ, admin, super_admin, group_list
 from pkg.tools.log import log
-from pkg.tools.state import getEventTransmit
+from pkg.tools.state import getEventTransmit,setEventTransmit
 
 
 class Listen:
@@ -23,6 +23,7 @@ class Listen:
         self.port = port
 
     def close(self, conn: socket.socket):
+        setEventTransmit(True)
         response = "HTTP/1.1 200 OK\r\n\rn"
         conn.send((response.encode()))
         conn.close()
