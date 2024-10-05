@@ -1,6 +1,6 @@
 from pkg.core.bot.message import MessageList
 from pkg.core.bot.sender import Sender
-from pkg.config import loop_interval, command_prefix
+from pkg.config import loop_interval, command_prefix, Bot_QQ
 from pkg.core.command.command import command_list, Command, noCommand
 import time
 import threading
@@ -25,6 +25,17 @@ class GroupEvent:
         判断该事件是否为命令事件。
         """
         return self.message.find(command_prefix) == 0
+
+    def isAtBot(self) -> bool:
+        """
+        判断该事件是否为@机器人。
+
+        该方法会自动删除掉At消息对象。
+        """
+        if self.message.getAt(True) == 0 and self.message.getAt().at_id == Bot_QQ:
+            self.message.pop()
+            return True
+        return False
 
     def getCommand(self) -> Command:
         """
