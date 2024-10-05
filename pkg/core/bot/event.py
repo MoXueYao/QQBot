@@ -1,4 +1,4 @@
-from pkg.core.bot.message import MessageList
+from pkg.core.bot.message import MessageList, Text
 from pkg.core.bot.sender import Sender
 from pkg.config import loop_interval, command_prefix, Bot_QQ
 from pkg.core.command.command import command_list, Command, noCommand
@@ -34,6 +34,12 @@ class GroupEvent:
         """
         if self.message.getAt(True) == 0 and self.message.getAt().at_id == Bot_QQ:
             self.message.pop()
+            # 如果消息的第一个字符为空格则去除空格
+            if (
+                isinstance(self.message.messages[0], Text)
+                and self.message.messages[0].text.find(" ") == 0
+            ):
+                self.message.messages[0].text = self.message.messages[0].text[1:]
             return True
         return False
 

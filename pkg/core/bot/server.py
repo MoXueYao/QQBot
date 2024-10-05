@@ -14,7 +14,7 @@ from pkg.core.bot.event import (
 from pkg.core.plugin.pluginloader import PluginManager
 from pkg.config import only_At, Bot_QQ, admin, super_admin, group_list
 from pkg.tools.log import log
-from pkg.tools.state import getEventTransmit,setEventTransmit
+from pkg.tools.state import getEventTransmit, setEventTransmit
 
 
 class Listen:
@@ -74,13 +74,12 @@ class Listen:
             if only_At:
                 # 消息列表去除第一个At消息
                 msgList.pop(0)
-                msg_list_oneMSG = msgList.messages[0]
                 # 如果消息的第一个字符为空格则去除空格
                 if (
-                    isinstance(msg_list_oneMSG, Text)
-                    and msg_list_oneMSG.text.find(" ") == 0
+                    isinstance(msgList.messages[0], Text)
+                    and msgList.messages[0].text.find(" ") == 0
                 ):
-                    msg_list_oneMSG.text = msg_list_oneMSG.text[1:]
+                    msgList.messages[0].text = msgList.messages[0].text[1:]
             # 创建事件对象
             event = GroupEvent(
                 Sender(
