@@ -88,6 +88,37 @@ class NTBot:
         except:
             log.error(f"[好友{user_id}] <- 发送合并转发失败。")
 
+    def upload_private_file(self, user_id: int, file: str, name: str):
+        """
+        发送好友文件。
+
+        Args:
+            user_id (int): 用户id
+            file (str): 本地文件路径(绝对路径)
+            name (str): 发送时所用文件名称
+        """
+        data = {"user_id": user_id, "file": file, "name": name}
+        try:
+            a = post(self.host, self.target_port, "/upload_private_file", data)
+            log.info(f"[好友{user_id}] <- 从{file}发送文件{name}成功")
+        except:
+            log.error(f"[好友{user_id}] <- 从{file}发送文件{name}失败")
+
+    def send_like(self, user_id: int, times: int):
+        """
+        个人名片点赞
+
+        Args:
+            user_id (int): 用户id
+            times (int): 点赞次数
+        """
+        data = {"user_id": user_id, "times": times}
+        try:
+            post(self.host, self.target_port, "/send_like", data)
+            log.info(f"[用户{user_id}] <- 为{user_id}点了{times}个赞")
+        except:
+            log.error(f"[用户{user_id}] <- 为{user_id}点了{times}个赞失败")
+
     def group_kick(self, group_id: int, user_id: int, reject_add_request: bool = False):
         """
         群踢人。
@@ -139,6 +170,38 @@ class NTBot:
             log.info(f"[群{group_id}] <- 设置{user_id}名片为{card}")
         except:
             log.error(f"[群{group_id}] <- 设置{user_id}名片为{card} 失败。")
+
+    def set_qq_avatar(self, file: str):
+        """
+        设置个人头像
+
+        Args:
+            file (str): 头像图片绝对路径, 支持 http, base64
+        """
+        data = {"file": f"file://{str(file)}"}
+        try:
+            post(self.host, self.target_port, "/set_qq_avatar", data)
+            log.info(f"设置[{file}]的文件为头像, 成功")
+        except:
+            log.error(f"设置[{file}]的文件为头像, 失败")
+
+    def set_qq_profile(self, nickname: str, company: str = "", email: str = "", college: str = "", personal_note: str = ""):
+        """
+        设置个人信息
+
+        Args:
+            nickname (str): 昵称
+            company (str): 公司,默认为空
+            email (str): 邮箱,默认为空
+            college (str): 学校,默认为空
+            personal_note (str): 个人说明,默认为空
+        """
+        data = {"nickname": str(nickname), "company": str(company), "email": str(email), "college": str(college), "personal_note": str(personal_note)}
+        try:
+            post(self.host, self.target_port, "/set_qq_profile", data)
+            log.info(f"设置昵称为[{nickname}],公司为[{company}],邮箱为[{email}],学校为[{college}],个性签名为[{personal_note}], 成功")
+        except:
+            log.error(f"设置昵称为[{nickname}],公司为[{company}],邮箱为[{email}],学校为[{college}],个性签名为[{personal_note}], 失败")
 
     def start(self):
         """
