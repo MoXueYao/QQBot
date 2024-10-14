@@ -139,4 +139,4 @@ def loopHandler_run():
     while True:
         time.sleep(loop_interval)
         for func in Handler_loop:
-            threading.Thread(target=func.run, args=(1)).start()
+            threading.Thread(target=func.run, args=(1,)).start()
