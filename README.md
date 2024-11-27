@@ -10,20 +10,46 @@
 
  - 首先下载安装NT版QQ，你可以访问 https://im.qq.com/pcqq/index.shtml/ 来下载安装
  - 自行寻找并安装`NapCat`在电脑的任意位置。
- - 运行`...\NapCat\`中的`start.ps1`并登录你的QQ。
- - 如果没有，则说明你的版本更新，请自行查看NapCat的官方文档来尝试登陆。
- - 打开`...\NapCat\config\onebot11_你的qq号.json`然后参考如下方式将HTTP部分修改为：
- ```
-    "enable": true,
-    "host": "",
-    "port": 3000,
-    "secret": "",
-    "enableHeart": false,
-    "enablePost": true,
-    "postUrls": ["http://127.0.0.1:8080"]
+ - 运行`...\NapCat\`中的`launcher-win10.bat`并登录你的QQ。
+ - 如果没有，则说明你的版本和我不一致，请自行查看NapCat的官方文档来尝试登陆。
+ - 打开`...\NapCat\config\onebot11_你的qq号.json`然后参考如下内容修改为：
+ ```json
+    {
+  "network": {
+    "httpServers": [
+      {
+        "name": "httpServer",
+        "enable": true,
+        "port": 3000,
+        "host": "0.0.0.0",
+        "enableCors": true,
+        "enableWebsocket": true,
+        "messagePostFormat": "array",
+        "token": "",
+        "debug": false
+      }
+    ],
+    "httpClients": [
+      {
+        "name": "httpClient",
+        "enable": true,
+        "url": "http://localhost:8080",
+        "messagePostFormat": "array",
+        "reportSelfMessage": false,
+        "token": "",
+        "debug": false
+      }
+    ],
+    "websocketServers": [],
+    "websocketClients": []
+  },
+  "musicSignUrl": "",
+  "enableLocalFile2Url": false,
+  "parseMultMsg": true
+}
   ```
   - 注意！其他部分如果不懂就最好不要动!
-  - 再次运行`...\NapCat\`中的`start.ps1`并登录你的QQ。
+  - 再次运行`...\NapCat\`中的`launcher-win10.bat`并登录你的QQ。
 
 ## 2、运行示例代码
   - 首先需要下载Python环境，请自行解决。
