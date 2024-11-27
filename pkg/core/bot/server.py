@@ -31,7 +31,7 @@ class Listen:
     def listen(self, conn: socket.socket, addr):
         # 接收数据
         try:
-            data: dict = json.loads(conn.recv(4096).decode().split("\r\n\r\n")[1])
+            data: dict = json.loads(conn.recv(4096).decode().split("\r\n\r\n")[1][3:-1])
         except:
             log.error("数据解析失败。")
             conn.close()

@@ -43,9 +43,8 @@ class PluginManager:
                         # 实例化 Plugin 类
                         plugin_instance: PluginBase = plugin_class()
                         plugin_instance.plugin_name = plugin
-                        plugins.append(plugin_instance)
-                        # 调用 onLoad 方法
                         plugin_instance.onLoad()
+                        plugins.append(plugin_instance) 
                 except Exception as e:
                     log.error(f"插件加载失败: {e}")
 
