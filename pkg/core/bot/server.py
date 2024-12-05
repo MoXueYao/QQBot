@@ -71,15 +71,19 @@ class Listen:
             ):
                 self.close(conn)
                 return
-            if only_At:
-                # 消息列表去除第一个At消息
-                msgList.pop(0)
-                # 如果消息的第一个字符为空格则去除空格
-                if (
-                    isinstance(msgList.messages[0], Text)
-                    and msgList.messages[0].text.find(" ") == 0
-                ):
-                    msgList.messages[0].text = msgList.messages[0].text[1:]
+            try:
+                if only_At:
+                    # 消息列表去除第一个At消息
+                    msgList.pop(0)
+                    # 如果消息的第一个字符为空格则去除空格
+                    if (
+                        isinstance(msgList.messages[0], Text)
+                        and msgList.messages[0].text.find(" ") == 0
+                    ):
+                        msgList.messages[0].text = msgList.messages[0].text[1:]
+            except Exception as e:
+                log.error(f"群消息解析失败:{e}")
+                return
             # 创建事件对象
             event = GroupEvent(
                 Sender(
